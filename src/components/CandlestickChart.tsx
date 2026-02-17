@@ -3,8 +3,10 @@ import {
   CandlestickSeries,
   ColorType,
   createChart,
+  type CandlestickData,
   type IChartApi,
-  type ISeriesApi
+  type ISeriesApi,
+  type UTCTimestamp
 } from "lightweight-charts";
 import type { Candle } from "../types";
 
@@ -17,6 +19,14 @@ export default function CandlestickChart({ candles }: CandlestickChartProps) {
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
   const previousRef = useRef<Candle[]>([]);
+
+  const toChartCandle = (candle: Candle): CandlestickData<UTCTimestamp> => ({
+    time: candle.time as UTCTimestamp,
+    open: candle.open,
+    high: candle.high,
+    low: candle.low,
+    close: candle.close
+  });
 
   useEffect(() => {
     if (!containerRef.current || chartRef.current) return;
@@ -90,26 +100,26 @@ export default function CandlestickChart({ candles }: CandlestickChartProps) {
     }
 
     if (prev.length === 0) {
-      series.setData(next);
+      series.setData(next.map(toChartCandle));
       chart.timeScale().fitContent();
       previousRef.current = next;
       return;
     }
 
     if (next.length === prev.length) {
-      series.update(next[next.length - 1]);
+      series.update(toChartCandle(next[next.length - 1]));
       previousRef.current = next;
       return;
     }
 
     if (next.length === prev.length + 1) {
-      series.update(next[next.length - 2]);
-      series.update(next[next.length - 1]);
+      series.update(toChartCandle(next[next.length - 2]));
+      series.update(toChartCandle(next[next.length - 1]));
       previousRef.current = next;
       return;
     }
 
-    series.setData(next);
+    series.setData(next.map(toChartCandle));
     chart.timeScale().fitContent();
     previousRef.current = next;
   }, [candles]);
