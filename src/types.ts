@@ -68,3 +68,59 @@ export interface ProfileResponse {
   last30: ProfilePeriod;
   modes: ProfileModeStats[];
 }
+
+export interface JoinRoomRequest {
+  room_code: string;
+  display_name: string;
+  player_code: string;
+}
+
+export interface JoinRoomResponse {
+  room: {
+    room_code: string;
+  };
+  player: {
+    id: string;
+    display_name: string;
+    cash: number;
+  };
+  spread_pct: number;
+}
+
+export interface MarketHolding {
+  coin: string;
+  qty: number;
+  avg_cost: number;
+}
+
+export interface WalletResponse {
+  cash: number;
+  holdings: MarketHolding[];
+}
+
+export type TradeSide = "buy" | "sell";
+
+export interface TradeRequest extends JoinRoomRequest {
+  market: MarketType;
+  coin: string;
+  side: TradeSide;
+  qty: number;
+}
+
+export interface TradeResponse {
+  ok: true;
+  cash: number;
+  holding: MarketHolding;
+  trade: {
+    id: string;
+    coin: string;
+    side: TradeSide;
+    qty: number;
+    price_exec: number;
+    notional: number;
+    spread_pct: number;
+    created_at?: string;
+  };
+  price_exec: number;
+  spread_pct: number;
+}

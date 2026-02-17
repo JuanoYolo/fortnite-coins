@@ -31,6 +31,67 @@ Archivo `.env.example`:
 VITE_API_BASE=https://fortnite-coins-worker.juanocopiasierra2.workers.dev
 ```
 
+## Trading multiusuario (MVP)
+
+La app ahora soporta trading por sala con credenciales:
+
+- `room_code`: cÃ³digo de sala (si no existe, se crea)
+- `display_name`: nombre del jugador en la sala
+- `player_code`: PIN del jugador para autenticar operaciones
+
+Flujo bÃ¡sico:
+
+1. Al abrir la app, aparece `Join Room` si no hay sesiÃ³n guardada.
+2. Ingresa `room_code`, `display_name` y `player_code`.
+3. Se habilita `My Wallet` y botones `BUY`/`SELL` en cards y tabla.
+4. Cada trade se ejecuta con spread fijo de `0.5%` (`0.005`).
+
+Reglas del MVP:
+
+- Cash inicial por jugador: `100000` (moneda virtual).
+- `BUY` usa precio `price_now * (1 + 0.005)`.
+- `SELL` usa precio `price_now * (1 - 0.005)`.
+- Validaciones:
+  - No compra si cash insuficiente.
+  - No venta si holdings insuficientes.
+
+## Supabase SQL
+
+Ejecuta el script:
+
+```bash
+scripts/supabase_trading.sql
+```
+
+Este script crea:
+
+- `rooms`
+- `room_players`
+- `holdings`
+- `trades`
+
+Para MVP se deja sin RLS (acceso por `SUPABASE_SERVICE_ROLE_KEY` desde Worker).
+
+## Worker
+
+Se incluye implementaciÃ³n en:
+
+```bash
+worker/index.ts
+```
+
+Endpoints incluidos:
+
+- `POST /api/room/join`
+- `GET /api/wallet`
+- `POST /api/trade`
+- `GET /api/market`
+- `GET /api/players`
+- `POST /api/sync`
+- `GET /api/rooms/debug` (requiere `ADMIN_TOKEN` o `SYNC_TOKEN`)
+
+Todas las respuestas JSON del Worker usan headers combinados de JSON + CORS.
+
 ## Deploy a GitHub Pages
 
 1. En GitHub, activa Pages con source `GitHub Actions`.

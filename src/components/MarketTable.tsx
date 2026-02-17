@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { formatDate, formatPct, formatPrice } from "../lib/format";
-import type { CoinMarketItem, MarketType } from "../types";
+import type { CoinMarketItem, MarketType, TradeSide } from "../types";
 
 interface MarketTableProps {
   market: MarketType;
   items: CoinMarketItem[];
+  onTrade: (coin: CoinMarketItem, side: TradeSide) => void;
+  canTrade: boolean;
 }
 
-export default function MarketTable({ market, items }: MarketTableProps) {
+export default function MarketTable({ market, items, onTrade, canTrade }: MarketTableProps) {
   return (
     <div className="table-wrap">
       <table className="market-table">
@@ -19,6 +21,7 @@ export default function MarketTable({ market, items }: MarketTableProps) {
             <th>24h high</th>
             <th>24h low</th>
             <th>Last updated</th>
+            <th>Trade</th>
           </tr>
         </thead>
         <tbody>
@@ -41,6 +44,20 @@ export default function MarketTable({ market, items }: MarketTableProps) {
                 <td>{formatPrice(item.high_24h)}</td>
                 <td>{formatPrice(item.low_24h)}</td>
                 <td>{formatDate(item.last_updated)}</td>
+                <td>
+                  {canTrade ? (
+                    <div className="table-actions">
+                      <button type="button" className="action-btn buy" onClick={() => onTrade(item, "buy")}>
+                        BUY
+                      </button>
+                      <button type="button" className="action-btn sell" onClick={() => onTrade(item, "sell")}>
+                        SELL
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="muted">Join room</span>
+                  )}
+                </td>
               </tr>
             );
           })}
