@@ -1,0 +1,193 @@
+:root {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color-scheme: dark;
+  --bg: #0b1018;
+  --panel: #101a29;
+  --panel-2: #142236;
+  --line: #1f3554;
+  --text: #d6e1f1;
+  --muted: #8ba3c6;
+  --up: #43d28f;
+  --down: #ff6b7f;
+  --accent: #56a2ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 15% -10%, #1a2d47 0%, transparent 45%),
+    radial-gradient(circle at 100% 0%, #0d243f 0%, transparent 35%),
+    var(--bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+}
+
+.toggle {
+  display: inline-flex;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.2rem;
+}
+
+.toggle button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.toggle button.active {
+  color: var(--text);
+  background: linear-gradient(135deg, #173058, #1e3c6f);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.market-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.market-table th,
+.market-table td {
+  padding: 0.85rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.market-table th {
+  color: var(--muted);
+  font-weight: 600;
+  background: #0f1928;
+}
+
+.market-table tr:hover td {
+  background: #132138;
+}
+
+.coin-link {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.trend-up {
+  color: var(--up);
+}
+
+.trend-down {
+  color: var(--down);
+}
+
+.coin-card,
+.chart-panel {
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.coin-card p {
+  margin: 0.5rem 0;
+}
+
+.chart-panel {
+  margin-top: 1rem;
+}
+
+.chart-panel h3 {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.line-chart {
+  width: 100%;
+  height: 280px;
+}
+
+.line-chart rect {
+  fill: #0d1625;
+  stroke: var(--line);
+}
+
+.line-chart path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.back-btn {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  background: #10203a;
+  color: var(--text);
+}
+
+.status,
+.error {
+  margin: 0.8rem 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+}
+
+.status {
+  border: 1px solid #1d3353;
+  background: #112038;
+}
+
+.error {
+  border: 1px solid #633041;
+  background: #301825;
+  color: #ffc6d2;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 0.8rem;
+  }
+
+  .page-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
